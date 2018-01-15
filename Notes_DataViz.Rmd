@@ -18,23 +18,89 @@ After an introduction to base graphics, we look at a number of R plotting exampl
 Base Graphics Background
 R supports four different graphics systems: base graphics, grid graphics, lattice graphics, and ggplot2. Base graphics is the default graphics system in R, the easiest of the four systems to learn to use, and provides a wide variety of useful tools, especially for exploratory graphics where we wish to learn what is in an unfamiliar dataset.
 
-### A quick introduction to base R graphics
+## A quick introduction to base R graphics
 
 This chapter gives a brief overview of some of the things you can do with base graphics in R. This graphics system is one of four available in R and it forms the basis for this course because it is both the easiest to learn and extremely useful both in preparing exploratory data visualizations to help you see what's in a dataset and in preparing explanatory data visualizations to help others see what we have found.
 
-```{r}
+### Creating an exploratory plot array
 
+In this exercise, you'll construct a simple exploratory plot from a data frame that gives values for three variables, recorded over two winter heating seasons. The variables are:
+
+Temp: a measure of the outside temperature during one week
+Gas: the amount of heating gas consumed during that week
+Insul: a categorical variable with two values, indicating whether the measurements were made before or after an insulation upgrade was made to the house
+
+### INSTRUCTIONS
+
+Load the MASS package to make the whiteside data frame available.
+Apply the plot() function to the whiteside data frame.
+
+```{r}
+# Load MASS package
+library("MASS")
+
+# Plot whiteside data
+plot(whiteside)
+```
+### Creating an explanatory scatterplot
+
+In constrast to the exploratory analysis plot you created in the previous exercise, this exercise asks you to create a simple explanatory scatterplot, suitable for sharing with others.
+
+Here, it is important to make editorial choices in constructing this plot, rather than depending entirely on default options. In particular, the important editorial aspects of this plot are: first, the variables to be plotted, and second, the axis labels, which are specified as strings to the xlab and ylab arguments to the plot() function.
+
+### INSTRUCTIONS
+
+Use the plot() function to construct a scatterplot of the heating gas consumption, Gas, versus the outside temperature, Temp, from the whiteside data frame. Label the x- and y-axes to indicate the variables in the plot (i.e. "Outside temperature" and "Heating gas consumption", respectively.)
+
+```{r}
+# Plot Gas vs. Temp
+plot(whiteside$Temp, whiteside$Gas, ylab="Heating gas consumption", xlab="Outside temperature")
 ```
 
-```{r}
+### The plot() function is generic
 
+One of the key features of the plot() function is that it is generic, meaning that the results of applying the function depend on the nature of the object to which it is applied.
+
+In the first exercise of this chapter, applying the plot() function to the whiteside data frame resulted in a plot array. Here, we obtain a fundamentally different kind of result when we apply the same function to Insul, a factor variable from the same data frame.
+
+### INSTRUCTIONS
+
+Apply the plot() function to the Insul variable from the whiteside data frame.
+
+```{r}
+# Apply the plot() function to Insul
+plot(whiteside$Insul)
 ```
 
-```{r}
+### Adding details to a plot using point shapes, color, and reference lines
 
-```
+Adding additional details to your explanatory plots can help emphasize certain aspects of your data. For example, by specifying the pch and col arguments to the plot() function, you can add different point shapes and colors to show how different variables or subsets of your data relate to each other. In addition, you can add a new set of points to your existing scatterplot with the points() function, and add reference lines with the abline() function.
+
+This exercise asks you to use these methods to create an enhanced scatterplot that effectively shows how three variables in the Cars93 data frame relate to each other. These variables are:
+
+Price: the average sale price for a car
+Max.Price: the highest recorded price for that car
+Min.Price: the lowest recorded price for that car
+
+### INSTRUCTIONS
+
+Load the MASS package to make the Cars93 data frame available.
+Use the plot() function to create a scatterplot of the Max.Price variable versus the Price variable, specifying the pch and col parameters so the data points are represented as red solid triangles. The pch value to plot solid triangles is 17.
+Use the points() function to add a second set of points to your scatterplot, representing Min.Price versus Price, where the new data points are represented as blue solid circles. The pch value for solid circles is 16.
+Use the abline() function to add a dashed equality reference line (i.e., a line with y-intercept 0 and slope 1). See abline() to learn what arguments a and b refer to.
 
 ```{r}
+# Load the MASS package
+library("MASS")
+
+# Plot Max.Price vs. Price as red triangles
+plot(Cars93$Price, Cars93$Max.Price, pch = 17, col = "red" )
+
+# Add Min.Price vs. Price as blue circles
+points(Cars93$Price, Cars93$Min.Price, pch = 16, col = "blue" )
+
+# Add an equality reference line with abline()
+abline(a = 0, b = 1, lty = 2)
 
 ```
 
