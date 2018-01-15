@@ -1,0 +1,69 @@
+---
+title: "Data Visualization in R"
+author: "AAA"
+date: "15 de enero de 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Course Description
+
+This course provides a comprehensive introduction on how to plot data with R’s default graphics system, base graphics.
+
+After an introduction to base graphics, we look at a number of R plotting examples, from simple graphs such as scatterplots to plotting correlation matrices. The course finishes with exercises in plot customization. This includes using R plot colors effectively and creating and saving complex plots in R.
+
+Base Graphics Background
+R supports four different graphics systems: base graphics, grid graphics, lattice graphics, and ggplot2. Base graphics is the default graphics system in R, the easiest of the four systems to learn to use, and provides a wide variety of useful tools, especially for exploratory graphics where we wish to learn what is in an unfamiliar dataset.
+
+### A quick introduction to base R graphics
+
+This chapter gives a brief overview of some of the things you can do with base graphics in R. This graphics system is one of four available in R and it forms the basis for this course because it is both the easiest to learn and extremely useful both in preparing exploratory data visualizations to help you see what's in a dataset and in preparing explanatory data visualizations to help others see what we have found.
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+### Different plot types
+
+Base R graphics supports many different plot types and this chapter introduces several of them that are particularly useful in seeing important features in a dataset and in explaining those features to others. We start with simple tools like histograms and density plots for characterizing one variable at a time, move on to scatter plots and other useful tools for showing how two variables relate, and finally introduce some tools for visualizing more complex relationships in our dataset.
+
+### Adding details to plots
+
+Most base R graphics functions support many optional arguments and parameters that allow us to customize our plots to get exactly what we want. In this chapter, we will learn how to modify point shapes and sizes, line types and widths, add points and lines to plots, add explanatory text and generate multiple plot arrays.
+
+### How much is too much?
+
+As we have seen, base R graphics provides tremendous flexibility in creating plots with multiple lines, points of different shapes and sizes, and added text, along with arrays of multiple plots. If we attempt to add too many details to a plot or too many plots to an array, however, the result can become too complicated to be useful. This chapter focuses on how to manage this visual complexity so the results remain useful to ourselves and to others.
+
+### Advanced plot customization and beyond
+
+This final chapter introduces a number of important topics, including the use of numerical plot details returned invisibly by functions like barplot() to enhance our plots, and saving plots to external files so they don't vanish when we end our current R session. This chapter also offers some guidelines for using color effectively in data visualizations, and it concludes with a brief introduction to the other three graphics systems in R.
