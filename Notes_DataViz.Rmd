@@ -18,6 +18,14 @@ After an introduction to base graphics, we look at a number of R plotting exampl
 Base Graphics Background
 R supports four different graphics systems: base graphics, grid graphics, lattice graphics, and ggplot2. Base graphics is the default graphics system in R, the easiest of the four systems to learn to use, and provides a wide variety of useful tools, especially for exploratory graphics where we wish to learn what is in an unfamiliar dataset.
 
+
+## Packages requirements
+
+```{r}
+#install.packages("robustbase")
+
+```
+
 ## A quick introduction to base R graphics
 
 This chapter gives a brief overview of some of the things you can do with base graphics in R. This graphics system is one of four available in R and it forms the basis for this course because it is both the easiest to learn and extremely useful both in preparing exploratory data visualizations to help you see what's in a dataset and in preparing explanatory data visualizations to help others see what we have found.
@@ -104,8 +112,40 @@ abline(a = 0, b = 1, lty = 2)
 
 ```
 
-```{r}
+### Creating multiple plot arrays
 
+You can plot multiple graphs on a single pane using the par() function with its mfrow parameter. For example, par(mfrow = c(1, 2)) creates a plot array with 1 row and 2 columns, allowing you to view two graphs side-by-side. This way, you can compare and contrast different datasets or different views of the same dataset. This exercise asks you to compare two views of the Animals2 dataset from the robustbase package, differing in how its variables are represented.
+
+The objective of this exercise is to emphasize that the original representation of the variables that we have in a dataset is not always the best one for visualization or analysis. By representing the original variables in log scale, for example, we can better see and understand the data.
+
+### INSTRUCTIONS
+
+Load the robustbase package to make the Animals2 data frame available.
+Use the par() function and set the mfrow parameter to create a side-by-side plot array with 1 row and 2 columns.
+Use the plot() function to create a scatterplot of the variables brain versus body from this data frame, without specifying additional arguments.
+See what happens when you run title("Original representation") after your first call to plot().
+Use the plot() function again, but this time with log = "xy", to generate a plot of both the x and y variables in log scale.
+Use the title() function to add "Log-log plot" as the title to the second plot.
+Take Hint (-30xp)
+
+```{r}
+# Load the robustbase package
+library("robustbase")
+
+# Set up the side-by-side plot array
+par(mfrow = c(1,2))
+
+# First plot: brain vs. body in its original form
+plot(Animals2$body, Animals2$brain)
+
+# Add the first title
+title("Original representation")
+
+# Second plot: log-log plot of brain vs. body
+plot(Animals2$body, Animals2$brain, log="xy")
+
+# Add the second title
+title("Log-log plot")
 ```
 
 
