@@ -24,8 +24,10 @@ R supports four different graphics systems: base graphics, grid graphics, lattic
 ```{r}
 #install.packages("robustbase")
 #install.packages("insuranceData")
-install.packages("car")
-
+#install.packages("car")
+#install.packages("aplpack")
+#install.packages("corrplot")
+install.packages("rpart")
 ```
 
 ## A quick introduction to base R graphics
@@ -280,13 +282,158 @@ qqPlot(weights)
 qqPlot(Boston$tax)
 ```
 
+### The sunflowerplot() function for repeated numerical data
+A scatterplot represents each (x, y) pair in a dataset by a single point. If some of these pairs are repeated (i.e. if the same combination of x and y values appears more than once and thus lie on top of each other), we can't see this in a scatterplot. Several approaches have been developed to deal with this problem, including jittering, which adds small random values to each x and y value, so repeated points will appear as clusters of nearby points.
+
+A useful alternative that is equally effective in representing repeated data points is the sunflowerplot, which represents each repeated point by a "sunflower," with one "petal" for each repetition of a data point.
+
+This exercise asks you to construct both a scatterplot and a sunflowerplot from the same dataset, one that contains repeated data points. Comparing these plots allows you to see how much information can be lost in a standard scatterplot when some data points appear many times.
+
+### INSTRUCTIONS
+
+Use the par() function to set the mfrow parameter for a side-by-side plot array.
+For the left-hand plot, use the plot() function to construct a scatterplot of the rad variable versus the zn variable, both from the Boston data frame in the MASS package.
+Use the title() function to add the title "Standard scatterplot" to this plot.
+For the right-hand plot, apply the sunflowerplot() function to the same data to see the presence of repeated data points, not evident from the scatterplot on the left.
+
+```{r}
+# Set up a side-by-side plot array
+par(mfrow = c(1,2))
+
+# Create the standard scatterplot
+plot(rad ~ zn, data = Boston)
+ 
+# Add the title
+title("Standard scatterplot")
+
+# Create the sunflowerplot
+sunflowerplot(rad ~ zn, data = Boston)
+
+# Add the title
+title("Sunflower plot")
+
+
+```
+
+### Useful options for the boxplot() function
+The boxplot() function shows how the distribution of a numerical variable y differs across the unique levels of a second variable, x. To be effective, this second variable should not have too many unique levels (e.g., 10 or fewer is good; many more than this makes the plot difficult to interpret).
+
+The boxplot() function also has a number of optional parameters and this exercise asks you to use three of them to obtain a more informative plot:
+
+varwidth allows for variable-width boxplots that show the different sizes of the data subsets.
+log allows for log-transformed y-values.
+las allows for more readable axis labels.
+This exercise also illustrates the use of the formula interface: y ~ x indicates that we want a boxplot of the y variable across the different levels of the x variable. See ?boxplot for more details.
+
+### INSTRUCTIONS
+
+Using the formula interface, create a boxplot showing the distribution of numerical crim values over the different distinct rad values from the Boston data frame. Use the varwidth parameter to obtain variable-width boxplots, specify a log-transformed y-axis, and set the las parameter equal to 1 to obtain horizontal labels for both the x- and y-axes.
+Use the title() function to add the title "Crime rate vs. radial highway index".
+
+```{r}
+# Create a variable-width boxplot with log y-axis & horizontal labels
+boxplot(crim ~ rad, data = Boston, varwidth = TRUE, log = "y", las =1 )
+
+# Add a title
+title("Crime rate vs. radial highway index")
+```
+
+### Using the mosaicplot() function
+A mosaic plot may be viewed as a scatterplot between categorical variables and it is supported in R with the mosaicplot() function.
+
+As this example shows, in addition to categorical variables, this plot can also be useful in understanding the relationship between numerical variables, either integer- or real-valued, that take only a few distinct values.
+
+More specifically, this exercise asks you to construct a mosaic plot showing the relationship between the numerical carb and cyl variables from the mtcars data frame, variables that exhibit 6 and 3 unique values, respectively.
+
+### INSTRUCTIONS
+
+Apply the mosaicplot() function with the formula interface to see how the levels of the carb variable vary with the levels of the cyl variable from the mtcars data frame.
+
+
+```{r}
+# Create a mosaic plot using the formula interface
+mosaicplot(carb ~ cyl, data = mtcars)
+```
+
+
+### Using the bagplot() function
+A single box plot gives a graphical representation of the range of variation in a numerical variable, based on five numbers:
+
+The minimum and maximum values
+The median (or "middle") value
+Two intermediate values called the lower and upper quartiles
+In addition, the standard box plot computes a nominal data range from three of these numbers and flags points falling outside this range as outliers, representing them as distinct points.
+
+The bag plot extends this representation to two numerical variables, showing their relationship, both within two-dimensional "bags" corresponding to the "box" in the standard boxplot, and indicating outlying points outside these limits.
+
+This exercise asks you to construct, first, side-by-side box plots of the Min.Price and Max.Price variables from the mtcars dataset, and then to use the bagplot() function from the aplpack package to construct the corresponding bag plot.
+
+### INSTRUCTIONS
+
+Use the boxplot() function to construct side-by-side box plots for Min.Price and Max.Price from the Cars93 data frame.
+Load the aplpack package to make the bagplot() function available.
+Construct the bag plot showing the relationship between the Min.Price and Max.Price variables from the Cars93 data frame. Use the cex parameter to make the point sizes in this plot 20 percent larger than the default size.
+Use the abline() function to add a dashed equality reference line with intercept 0 and slope 1.
+
+```{r}
+# Create a side-by-side boxplot summary
+boxplot(Cars93$Min.Price, Cars93$Max.Price)
+
+# Load aplpack to make the bagplot() function available
+library("aplpack")
+
+# Create a bagplot for the same two variables
+bagplot(Cars93$Min.Price, Cars93$Max.Price, cex = 1.2)
+
+# Add an equality reference line
+abline(a=0, b=1, lty = 2)
+```
+
+### Plotting correlation matrices with the corrplot() function
+Correlation matrices were introduced in the video as a useful tool for obtaining a preliminary view of the relationships between multiple numerical variables.
+
+This exercise asks you to use the corrplot() function from the corrplot package to visualize this correlation matrix for the numerical variables from the UScereal data frame in the MASS package. Recall that in this version of these plots, ellipses that are thin and elongated indicate a large correlation value between the indicated variables, while ellipses that are nearly circular indicate correlations near zero.
+
+### INSTRUCTIONS
+
+Create a subset of the UScereal data frame that contains only the 9 numerical (i.e., non-factor) variables. Save the result as numericalVars.
+Apply the cor() function to this subset to compute the correlation matrix containing the correlation coefficients between all variable pairs. Save the result as corrMat.
+Apply the corrplot() function to display this correlation matrix, using the "ellipse" method.
+Which two variables are most highly correlated with potassium?
+
+```{r}
+# Load the corrplot library for the corrplot() function
+library("corrplot")
+
+# Extract the numerical variables from UScereal
+numericalVars <- UScereal[,2:10]
+
+# Compute the correlation matrix for these variables
+corrMat <- cor(numericalVars)
+
+# Generate the correlation ellipse plot
+corrplot(corrMat, method = "ellipse" )
+```
+
+### Building and plotting rpart() models
+It was noted in the video that decision trees represent a popular form of predictive model because they are easy to visualize and explain. It was also noted that the rpart package is probably the most popular of several R packages that can be used to build and visualize these models.
+
+This exercise asks you to, first, build a decision tree model using the rpart() function from this package, and then display the resulting model structure using the generic functions plot() and text().
+
+### INSTRUCTIONS
+
+Load the rpart package to make the rpart() modeling function and the associated methods for generic functions like plot() available.
+Use the rpart() function to fit a decision tree model tree_model that predicts medv in the Boston data frame from all of the other variables in this data frame.
+Apply the plot() function to tree_model to obtain an unlabelled plot of the structure of this decision tree model.
+Apply the text() function to tree_model to label this plot. To make the labels easier to read, use the cex parameter to reduce the text to 70% of the default size.
+
+
 ```{r}
 
 ```
 
-```{r}
 
-```
+
 
 
 
