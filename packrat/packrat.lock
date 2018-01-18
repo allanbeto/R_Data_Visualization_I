@@ -9,10 +9,26 @@ Source: CRAN
 Version: 1.0-8
 Hash: adc74e88e85eabe6c7d73db6a86fe6cf
 
+Package: MatrixModels
+Source: CRAN
+Version: 0.4-1
+Hash: 60a5c75e57aae4a0ce76cb7422939aaf
+
 Package: Rcpp
 Source: CRAN
 Version: 0.12.14
 Hash: f9a2a481350397e53b0768bf488329cd
+
+Package: RcppEigen
+Source: CRAN
+Version: 0.3.3.3.1
+Hash: 583bdf1dc4a9dc51c13c446246bd0a89
+Requires: Rcpp
+
+Package: SparseM
+Source: CRAN
+Version: 1.77
+Hash: 08f1f60e1038957030bcd9f4a58d22d8
 
 Package: backports
 Source: CRAN
@@ -34,6 +50,12 @@ Source: CRAN
 Version: 1.17.1
 Hash: 97cb6f6293cd18d17df77a6383cc6763
 Requires: bitops
+
+Package: car
+Source: CRAN
+Version: 2.1-6
+Hash: 43c23d68bf56137724b83c7659fde443
+Requires: pbkrtest, quantreg
 
 Package: digest
 Source: CRAN
@@ -57,6 +79,11 @@ Version: 0.3.6
 Hash: 10db2fe4e1ac6057e5555db165a0d870
 Requires: Rcpp, digest
 
+Package: insuranceData
+Source: CRAN
+Version: 1.0
+Hash: 6d82df5844432979bd7750dd13a7f71c
+
 Package: jsonlite
 Source: CRAN
 Version: 1.5
@@ -67,6 +94,12 @@ Source: CRAN
 Version: 1.18
 Hash: 5be8a90c6aac24e7e0a4f18b829cc6e2
 Requires: digest, evaluate, highr, markdown, stringr, yaml
+
+Package: lme4
+Source: CRAN
+Version: 1.1-15
+Hash: a1a457ca93395c5525cfcc9d14ea7249
+Requires: Rcpp, RcppEigen, minqa, nloptr
 
 Package: magrittr
 Source: CRAN
@@ -84,10 +117,33 @@ Source: CRAN
 Version: 0.5
 Hash: 463550cf44fb6f0a2359368f42eebe62
 
+Package: minqa
+Source: CRAN
+Version: 1.2.4
+Hash: 860f36fcff3e5bc62ecc97dab1a21d5f
+Requires: Rcpp
+
+Package: nloptr
+Source: CRAN
+Version: 1.0.4
+Hash: 8053df240a4635aeb54fc68c6de67709
+
 Package: packrat
 Source: CRAN
 Version: 0.4.8-1
 Hash: 6ad605ba7b4b476d84be6632393f5765
+
+Package: pbkrtest
+Source: CRAN
+Version: 0.4-7
+Hash: f195c3a0f527f69c491569c5cbaaf1db
+Requires: lme4
+
+Package: quantreg
+Source: CRAN
+Version: 5.34
+Hash: 066533d583980031b8ce01a437db315e
+Requires: MatrixModels, SparseM
 
 Package: rmarkdown
 Source: CRAN

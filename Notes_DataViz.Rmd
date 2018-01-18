@@ -23,6 +23,8 @@ R supports four different graphics systems: base graphics, grid graphics, lattic
 
 ```{r}
 #install.packages("robustbase")
+#install.packages("insuranceData")
+install.packages("car")
 
 ```
 
@@ -148,19 +150,150 @@ plot(Animals2$body, Animals2$brain, log="xy")
 title("Log-log plot")
 ```
 
+### Avoid pie charts
+The same dataset can be displayed or summarized in many different ways, but some are much more suitable than others.
 
+Despite their general popularity, pie charts are often a poor choice. Though R allows pie charts with the pie() function, even the help file for this function argues against their use. Specifically, the help file includes a "Note" that begins with the words: "Pie charts are a very bad way of displaying information."
 
+Bar charts are a recommended alternative and, in this exercise, you'll see why.
 
+### INSTRUCTIONS
 
+Load the insuranceData package and use the data() function to load the dataCar data frame from this package.
+Use the par() function and set the mfrow parameter to create a side-by-side plot array with 1 row and 2 columns.
+Use the table() function and the sort() function to create a table of counts of the distinct levels of the veh_body variable in the dataCar data frame, in decreasing order. Call this table tbl.
+Pass tbl to the pie() function to create a pie chart representation of this data as the left-hand plot. Use title() to title this plot "Pie chart".
+Similarly, use the barplot() and title() functions to create a barplot representation of the same data, specifying las = 2 to make both sets of labels perpendicular to the axes, and using cex.names = 0.5 to make the name labels half the default size. Title this plot "Bar chart".
 
+```{r}
+# Load the insuranceData package
+library("insuranceData")
 
+# Use the data() function to get the dataCar data frame
+data(dataCar)
 
+# Set up a side-by-side plot array
+par(mfrow = c(1,2))
 
+# Create a table of veh_body record counts and sort
+tbl <- sort(table(dataCar$veh_body),
+            decreasing = TRUE)
 
+# Create the pie chart and give it a title
+pie(tbl)
+title("Pie chart")
+
+# Create the barplot with perpendicular, half-sized labels
+barplot(tbl, las = 2, cex.names = 0.5)
+
+# Add a title
+title("Bar chart")
+```
 
 ### Different plot types
 
 Base R graphics supports many different plot types and this chapter introduces several of them that are particularly useful in seeing important features in a dataset and in explaining those features to others. We start with simple tools like histograms and density plots for characterizing one variable at a time, move on to scatter plots and other useful tools for showing how two variables relate, and finally introduce some tools for visualizing more complex relationships in our dataset.
+
+### The hist() and truehist() functions
+Histograms are probably the best-known way of looking at how the values of a numerical variable are distributed over their range, and R provides several different histogram implementations.
+
+The purpose of this exercise is to introduce two of these:
+
+hist() is part of base R and its default option yields a histogram based on the number of times a record falls into each of the bins on which the histogram is based.
+truehist() is from the MASS package and scales these counts to give an estimate of the probability density.
+
+### INSTRUCTIONS
+
+Use the par() function to set the mfrow parameter for a side-by-side array of two plots.
+Use the hist() function to generate a histogram of the Horsepower variable from the Cars93 data frame. Set its main argument equal to the title of the plot, "hist() plot".
+Use the truehist() function to generate an alternative histogram of the same variable. Title this plot, "truehist() plot" by specifying its main argument accordingly.
+
+```{r}
+# Set up a side-by-side plot array
+par(mfrow = c(1,2))
+
+# Create a histogram of counts with hist()
+hist(Cars93$Horsepower, main="hist() plot")
+# Create a normalized histogram with truehist()
+truehist(Cars93$Horsepower, main="truehist() plot")
+
+
+```
+
+### Density plots as smoothed histograms
+While they are probably not as well known as the histogram, density estimates may be regarded as smoothed histograms, designed to give a better estimate of the density function for a random variable.
+
+In this exercise, you'll use the ChickWeight dataset, which contains a collection of chicks' weights. You will first select for the chicks that are 16 weeks old. Then, you'll create a histogram using the truehist() function, and add its density plot on top, using the lines() and density() functions with their default options. The density plot of this type of variable is often expected to conform approximately to the bell-shaped curve, otherwise known as the Gaussian distribution. Let's find out whether that's the case for this dataset.
+
+### INSTRUCTIONS
+
+Create the variable index16 using the which() function that selects records from the ChickWeight data frame with Time equal to 16.
+Create the variable weights that gives the weights of the 16-week old chicks.
+Use the truehist() function to generate a histogram from weights.
+Use the lines() and density() functions to overlay a density plot of the weights values on the histogram.
+
+```{r}
+# Create index16, pointing to 16-week chicks
+index16 <- which(ChickWeight$Time == 16)
+
+# Get the 16-week chick weights
+weights <- ChickWeight$weight[index16]
+
+# Plot the normalized histogram
+truehist(weights)
+
+# Add the density curve to the histogram
+
+lines(density(weights))
+```
+
+
+### Using the qqPlot() function to see many details in data
+A practical limitation of both histograms and density estimates is that, if we want to know whether the Gaussian distribution assumption is reasonable for our data, it is difficult to tell.
+
+The quantile-quantile plot, or QQ-plot, is a useful alternative: we sort our data, plot it against a specially-designed x-axis based on our reference distribution (e.g., the Gaussian "bell curve"), and look to see whether the points lie approximately on a straight line. In R, several QQ-plot implementations are available, but the most convenient one is the qqPlot() function in the car package.
+
+The first part of this exercise applies this function to the 16-week chick weight data considered in the last exercise, to show that the Gaussian distribution appears to be reasonable here. The second part of the exercise applies this function to another variable where the Gaussian distribution is obviously a poor fit, but the results also show the presence of repeated values (flat stretches in the plot) and portions of the data range where there are no observations (vertical "jumps" in the plot).
+
+### INSTRUCTIONS
+
+Load the car package to make the qqPlot() function available for use.
+Create the variable index16 using the which() function that selects records from the ChickWeight data frame with Time equal to 16.
+Create the variable weights that gives the weights of the 16-week old chicks.
+Apply the qqPlot() function to the weights data, noting that almost all of the points fall within the confidence intervals around the reference line, indicating a reasonable conformance with the Gaussian distribution for this data sequence.
+Apply the qqPlot() function to the tax variable from the Boston data frame in the MASS package.
+
+```{r}
+# Load the car package to make qqPlot() available
+library("car")
+
+# Create index16, pointing to 16-week chicks
+index16 <- which(ChickWeight$Time == 16)
+
+# Get the 16-week chick weights
+weights <- ChickWeight$weight[index16]
+
+# Show the normal QQ-plot of the chick weights
+qqPlot(weights)
+
+# Show the normal QQ-plot of the Boston$tax data
+qqPlot(Boston$tax)
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
 
 ### Adding details to plots
 
