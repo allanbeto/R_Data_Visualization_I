@@ -27,7 +27,7 @@ R supports four different graphics systems: base graphics, grid graphics, lattic
 #install.packages("car")
 #install.packages("aplpack")
 #install.packages("corrplot")
-install.packages("rpart")
+#install.packages("rpart")
 ```
 
 ## A quick introduction to base R graphics
@@ -427,6 +427,142 @@ Use the rpart() function to fit a decision tree model tree_model that predicts m
 Apply the plot() function to tree_model to obtain an unlabelled plot of the structure of this decision tree model.
 Apply the text() function to tree_model to label this plot. To make the labels easier to read, use the cex parameter to reduce the text to 70% of the default size.
 
+```{r}
+# Load the rpart library
+library("rpart")
+
+# Fit an rpart model to predict medv from all other Boston variables
+tree_model <- rpart(medv ~ ., data = Boston )
+
+# Plot the structure of this decision tree model
+plot(tree_model)
+
+# Add labels to this plot
+text(tree_model, cex = .7)
+```
+
+
+## Adding details to plots
+
+Most base R graphics functions support many optional arguments and parameters that allow us to customize our plots to get exactly what we want. In this chapter, we will learn how to modify point shapes and sizes, line types and widths, add points and lines to plots, add explanatory text and generate multiple plot arrays.
+
+### Introduction to the par() function
+You already saw how the mfrow parameter to the par() function could be used to plot multiple graphs in one pane. The par() function also allows you to set many other graphics parameters, whose values will remain in effect until they are reset by a subsequent par() call.
+
+Specifically, a call to the par() function with no parameters specified will return a list whose element names each specify a graphics parameter and whose element values specify the corresponding default values of these parameters. These parameters may be set by a call in the form par(name = value) where name is the name of the parameter to be set and value is the value to be assigned to this parameter.
+
+The purpose of this exercise is to give an idea of what these graphics parameters are. In the subsequent exercises we'll show how some of these parameters can be used to enhance plot results.
+
+### INSTRUCTIONS
+
+Capture the return from the par() function as the character vector plot_pars.
+Show the names of these graphics parameters by calling names() on plot_pars.
+Show the number of parameters in this list by calling length().
+
+```{r}
+# Assign the return value from the par() function to plot_pars
+plot_pars <- par()
+
+# Display the names of the par() function's list elements
+names(plot_pars)
+
+# Display the number of par() function list elements
+length(plot_pars)
+```
+
+### Exploring the type option
+
+One of the important graphics parameters that can be set with the par() function is mfrow, which specifies the numbers of rows and columns in an array of plots. Valid values for this parameter are two-element numerical vectors, whose first element specifies the number of rows in the plot array and the second element specifies the number of rows.
+
+A more detailed discussion of using the mfrow parameter is given in Chapter 4 of this course. For now, note that to specify a plot array with three rows and one column, the command would be par(mfrow = c(3, 1)).
+
+The following exercise also introduces the type parameter for the plot() command, which specifies how the plot is drawn. The specific type values used here are:
+
+"p" for "points"
+"l" for "lines"
+"o" for "overlaid" (i.e., lines overlaid with points)
+"s" for "steps"
+
+### INSTRUCTIONS
+
+Use the par() function to set the mfrow parameter for a two-by-two plot array.
+Generate a plot of brain weights from the Animals2 data frame, with observations plotted as points and the title "points" by calling the title() function.
+Repeat, with observations plotted as lines and the title "lines".
+Repeat, with observations plotted as overlaid points and lines and the title "overlaid".
+Repeat, with observations plotted as steps and the title "steps".
+
+```{r}
+# Set up a 2-by-2 plot array
+par(mfrow = c(2,2))
+
+# Plot the Animals2 brain weight data as points
+plot(Animals2$brain, type = "p")
+
+# Add the title
+title("points")
+
+# Plot the brain weights with lines
+plot(Animals2$brain, type = "l")
+
+# Add the title
+title("lines")
+
+# Plot the brain weights as lines overlaid with points
+plot(Animals2$brain, type = "o")
+
+# Add the title
+title("overlaid")
+
+# Plot the brain weights as steps
+plot(Animals2$brain, type = "s")
+
+# Add the title
+title("steps")
+```
+
+### The surprising utility of the type "n" option
+The type = "n" option was discussed in the video and this exercise provides a simple example. This option is especially useful is when we are plotting data from multiple sources on a common set of axes. In such cases, we can compute ranges for the x- and y-axes so that all data points will appear on the plot, and then add the data with subsequent calls to points() or lines() as appropriate.
+
+This exercise asks you to generate a plot that compares mileage vs. horsepower data from two different sources: the mtcars data frame in the datasets package and the Cars93 data frame in the MASS package. To distinguish the different results from these data sources, the graphics parameter pch is used to specify point shapes. See ?points for a comprehensive list of some pch values and their corresponding point shapes.
+
+### INSTRUCTIONS
+
+Compute max_hp as the maximum of Horsepower from the Cars93 data frame and hp from the mtcars data frame.
+Compute max_mpg as the maximum of MPG.city from the Cars93 data frame, MPG.highway from this data frame, and mpg from the mtcars data frame.
+Using the type = "n" option, set up a plot with an x-axis that runs from zero to max_hp and a y-axis that runs from zero to max_mpg, with labels Horsepower and Miles per gallon.
+Using the points() function, add mpg vs. hp from the mtcars data frame to the plot as open circles (pch = 1).
+Using the points() function, add MPG.city vs. Horsepower to the plot as solid squares (refer to the plot of pch values).
+Using the points() function, add MPG.highway vs. Horsepower to the plot as open triangles pointing upwards (refer to the plot of pch values).
+
+```{r}
+# Compute max_hp
+max_hp <- max(Cars93$Horsepower, mtcars$hp )
+
+# Compute max_mpg
+max_mpg <- max(Cars93$MPG.city,  Cars93$MPG.highway, mtcars$mpg)
+
+# Create plot with type = "n"               
+plot(Cars93$Horsepower, Cars93$MPG.city,
+     type = "n", 
+     xlim = c(0, max_hp),
+     ylim = c(0, max_mpg),
+     xlab = "Horsepower",
+     ylab = "Miles per gallon")
+
+# Add open circles to plot
+points(mtcars$hp, mtcars$mpg, pch = 1)
+
+# Add solid squares to plot
+points(Cars93$Horsepower, Cars93$MPG.city, pch = 15)
+
+# Add open triangles to plot
+points(Cars93$Horsepower, Cars93$MPG.highway, pch = 2)
+
+```
+
+```{r}
+
+```
 
 ```{r}
 
@@ -435,16 +571,6 @@ Apply the text() function to tree_model to label this plot. To make the labels e
 
 
 
-
-
-
-
-
-
-
-### Adding details to plots
-
-Most base R graphics functions support many optional arguments and parameters that allow us to customize our plots to get exactly what we want. In this chapter, we will learn how to modify point shapes and sizes, line types and widths, add points and lines to plots, add explanatory text and generate multiple plot arrays.
 
 ### How much is too much?
 
