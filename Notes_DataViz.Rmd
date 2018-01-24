@@ -690,6 +690,107 @@ plot(whiteside$Temp, whiteside$Gas)
 abline(linear_model, lty = 2 )
 ```
 
+### Using the text() function to label plot features
+
+One of the main uses of the text() function is to add informative labels to a data plot. The text() function takes three arguments:
+
+x, which specifies the value for the x variable,
+y, which specifies the value for the y variable, and
+label, which specifies the label for the x-y value pair.
+This exercise asks you to first create a scatterplot of city gas mileage versus horsepower from the Cars93 data, then identify an interesting subset of the data (i.e. the 3-cylinder cars) and label these points. You will find that assigning a vector to the x, y, and label arguments to text() will result in labeling multiple points at once.
+
+### INSTRUCTIONS
+
+Create a scatterplot of MPG.city vs. Horsepower from the Cars93 data frame, with points represented as solid squares. Recall that the pch value for solid squares is 15.
+Create the variable index3 using the which() function that identifies all 3-cylinder cars.
+Label the Make of each 3-cylinder car in the Cars93 data frame using the text() function. Use the adj argument to specify left-justified text in your labels.
+Use the zoom feature in the Plots window to see this plot more clearly.
+
+```{r}
+# Create MPG.city vs. Horsepower plot with solid squares
+plot(Cars93$Horsepower, Cars93$MPG.city, pch = 15)
+
+# Create index3, pointing to 3-cylinder cars
+index3 <- which(Cars93$Cylinders == 3)
+
+# Add text giving names of cars next to data points
+text(x = Cars93$Horsepower[index3], 
+     y = Cars93$MPG.city[index3],
+     labels = Cars93$Make[index3], adj = 0)
+```
+
+### Adjusting text position, size, and font
+
+The previous exercise added explanatory text to a scatterplot. The purpose of this exercise is to improve this plot by modifying the text placement, increasing the text size, and displaying the text in boldface.
+
+It was noted that the adj argument to the text() function determines the horizontal placement of the text and it can take any value between 0 and 1. In fact, this argument can take values outside this range. That is, making this value negative causes the text to start to the right of the specified x position. Similarly, making adj greater than 1 causes the text to end to the left of the x position.
+
+Another useful optional argument for the text() function is cex, which scales the default text size. As a specific example, setting cex = 1.5 increases the text size by 50 percent, relative to the default value. Similarly, specifying cex = 0.8 reduces the text size by 20 percent.
+
+Finally, the third optional parameter used here is font, which can be used to specify one of four text fonts: font = 1 is the default text font (neither italic nor bold), font = 2 specifies bold face text, font = 3 specifies italic text, and font = 4 specifies both bold and italic text.
+
+### INSTRUCTIONS
+
+Create a plot of MPG.city vs. Horsepower from the Cars93 data frame, with data represented as open circles.
+Construct the variable index3 using the which() function that identifies the row numbers containing all 3-cylinder cars.
+Use the points() function to overlay solid circles on top of all points in the plot that represent 3-cylinder cars.
+Use the text() function with the Make variable as before to add labels to the right of the 3-cylinder cars, but now use adj = -0.2 to move the labels further to the right, use the cex argument to increase the label size by 20 percent, and use the font argument to make the labels bold italic.
+
+```{r}
+# Plot MPG.city vs. Horsepower as open circles
+plot(Cars93$Horsepower, Cars93$MPG.city, pch = 1)
+
+# Create index3, pointing to 3-cylinder cars
+index3 <- which(Cars93$Cylinders == 3)
+
+# Highlight 3-cylinder cars as solid circles
+points(Cars93$Horsepower[index3], Cars93$MPG.city[index3], pch = 16)
+
+# Add car names, offset from points, with larger bold text
+text(x = Cars93$Horsepower[index3], y = Cars93$MPG.city[index3], labels = Cars93$Make[index3], adj = -0.2, cex = 1.2, font = 4)
+
+
+```
+
+### Rotating text with the srt argument
+
+In addition to the optional arguments used in the previous exercises, the text() function also supports a number of other optional arguments that can be used to enhance the text. This exercise uses the cex argument to reduce the text size and introduces two new arguments. The first is the col argument that specifies the color used to display the text, and the second is the srt argument that allows us to rotate the text.
+
+Color has been used in several of the previous exercises to specify point colors, and the effective use of color is discussed further in Chapter 5. One of the points of this exercise is to show that the specification of text color with the text() function is essentially the same as the specification of point color with the plot() function. As a specific example, setting col = "green" in the text() function causes the text to appear in green. If col is not specified, the text appears in the default color set by the par() function, which is typically black.
+
+The srt parameter allows us to rotate the text through an angle specified in degrees. The typical default value (set by the par() function) is 0, causing the text to appear horizontally, reading from left to right. Specifying srt = 90 causes the text to be rotated 90 degrees counter-clockwise so that it reads from bottom to top instead of left to right.
+
+### INSTRUCTIONS
+
+Create a scatterplot of Gas vs. Temp from the whiteside data frame, as solid triangles.
+Use the which() function to create a vector indexB that points to all data observations with Insul having the value "Before".
+Use the which() function to create a vector indexA that points to all data observations with Insul having the value "After".
+Use the text() function to overlay the text "Before" on the appropriate points, in blue, rotated 30 degrees, reducing the text size to 80 percent of the default.
+Use the text() function to overlay the text "After" on the appropriate points, in red, rotated -20 degrees, reducing the text size to 80 percent of the default.
+
+```{r}
+# Plot Gas vs. Temp as solid triangles
+plot(whiteside$Temp, whiteside$Gas, pch = 17)
+
+# Create indexB, pointing to "Before" data
+indexB <- which(whiteside$Insul == "Before")
+
+# Create indexA, pointing to "After" data
+indexA <- which(whiteside$Insul == "After")
+
+
+# Add "Before" text in blue, rotated 30 degrees, 80% size
+text(x = whiteside$Temp[indexB], y = whiteside$Gas[indexB],
+     labels = "Before", col = "blue", srt = 30, cex = 1.8)
+
+# Add "After" text in red, rotated -20 degrees, 80% size
+text(x = whiteside$Temp[indexA], y = whiteside$Gas[indexA],
+     labels = "After", col = "red", srt = -20, cex = .8)
+
+
+```
+
+
 
 
 
