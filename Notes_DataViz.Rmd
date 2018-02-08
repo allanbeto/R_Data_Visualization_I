@@ -892,13 +892,126 @@ lines(trend2,lty = 3, lwd = 2 )
 ```
 
 
-
-
-
-### How much is too much?
+## How much is too much?
 
 As we have seen, base R graphics provides tremendous flexibility in creating plots with multiple lines, points of different shapes and sizes, and added text, along with arrays of multiple plots. If we attempt to add too many details to a plot or too many plots to an array, however, the result can become too complicated to be useful. This chapter focuses on how to manage this visual complexity so the results remain useful to ourselves and to others.
 
-### Advanced plot customization and beyond
+### Too much is too much
+The first example presented in Chapter 1 applied the plot() function to a data frame, yielding an array of scatterplots with one for each pair of columns in the data frame. Thus, the number of plots in this array is equal to the square of the number of columns in the data frame.
+
+This means that if we apply the plot() function to a data frame with many columns, we will generate an enormous array of scatterplots, each of which will be too small to be useful. The purpose of this exercise is to provide a memorable example.
+
+### INSTRUCTIONS
+
+Applying the plot() function to a data frame with k columns will create a k by k array of scatterplots.
+
+Use the ncol() function to compute the number of plots in this array for the Cars93 data frame. Just print the result to the console.
+Call plot() on Cars93 to generate the scatterplot array. Can you verify that your calculation was correct?
+
+```{r}
+# Compute the number of plots to be displayed
+ncol(Cars93)^2
+
+# Plot the array of scatterplots
+#plot(Cars93)
+
+```
+
+### Deciding how many scatterplots is too many
+
+As noted in the video, the matplot() function can be used to easily generate a plot with several scatterplots on the same set of axes. By default, the points in these scatterplots are represented by the numbers 1 through n, where n is the total number of scatterplots included, but most of the options available with the plot() function are also possible by specifying the appropriate arguments.
+
+This exercise asks you to set up a plot array with four of these multiple scatterplot displays, each including one more scatterplot than the previous one. The point of this exercise is to encourage you to judge for yourself how many scatterplots is too many?.
+
+INSTRUCTIONS
+
+Run the first line of sample code provided to construct a character vector called keep_vars that names six variables from the UScereal data frame.
+Using this vector of variable names, extract the data frame df containing only these variables from the UScereal data frame.
+Use the par() function to set up the mfrow parameter to generate a two-by-two plot array.
+Use the matplot() function to construct a two-scatterplot display of
+protein and fat versus calories. Give this plot the title "Two scatterplots" using the title() function. Label the x-axis "calories" and the y-axis "" to get rid of the default y-axis label.
+protein, fat and fibre versus calories. Give this plot the title "Three scatterplots". Similarly, label the x-axis "calories" and the y-axis "".
+protein, fat, fibre and carbo versus calories. Give this plot the title "Four scatterplots". Again, label the x-axis "calories" and the y-axis "".
+protein, fat, fibre, carbo, and sugars versus calories. Give this plot the title "Five scatterplots". Be sure to label the x-axis "calories" and the y-axis "" again.
+
+
+```{r}
+# Construct the vector keep_vars
+keep_vars <- c("calories", "protein", "fat",
+               "fibre", "carbo", "sugars")
+
+# Use keep_vars to extract the desired subset of UScereal
+df <- UScereal[, keep_vars]
+
+# Set up a two-by-two plot array
+par(mfrow = c(2, 2))
+
+# Use matplot() to generate an array of two scatterplots
+matplot(UScereal$calories, UScereal[,c("protein", "fat")],
+        xlab = "calories", ylab = "")
+        
+# Add a title
+title("Two scatterplots")
+
+
+# Use matplot() to generate an array of three scatterplots
+matplot(UScereal$calories, UScereal[,c("protein", "fat", "fibre")],
+        xlab = "calories", ylab = "")
+
+# Add a title
+title("Three scatterplots")
+
+# Use matplot() to generate an array of four scatterplots
+matplot(UScereal$calories, UScereal[,c("protein", "fat", "fibre", "carbo")], xlab = "calories", ylab = "")
+
+# Add a title
+title("Four scatterplots")
+
+# Use matplot() to generate an array of five scatterplots
+matplot(UScereal$calories, UScereal[,c("protein", "fat", "fibre", "carbo", "sugars"),], xlab = "calories", ylab = "")
+
+# Add a title
+title("Five scatterplots")
+```
+
+##How many words is too many?
+
+The main point of the previous two exercises has been to show that scatterplot arrays lose their utility if they are allowed to become too complex, either including too many plots, or attempting to include too many scatterplots on one set of axes. More generally, any data visualization loses its utility if it becomes too complex.
+
+This exercise asks you to consider this problem with wordclouds, displays that present words in varying sizes depending on their frequency. That is, more frequent words appear larger in the display, while rarer words appear in a smaller font.
+
+In R, wordclouds are easy to generate with the wordcloud() function in the wordcloud package. This function is called with a character vector of words, and a second numerical vector giving the number of times each word appears in the collection used to generate the wordcloud.
+
+Two other useful arguments for this function are scale and min.freq. The scale argument is a two-component numerical vector giving the relative size of the largest word in the display and that of the smallest word. The wordcloud only includes those words that occur at least min.freq times in the collection and the default value for this argument is 3.
+
+INSTRUCTIONS
+
+The wordcloud package is already loaded in your workspace.
+
+Use the table() function to create the variable mfr_table that tabulates the number of times each level of the Manufacturer variable appears in the Cars93 data frame.
+Use the wordcloud() function to display this manufacturer data, setting the scale argument to c(2, 0.25) to make the wordcloud fit in the display window.
+By default, the wordcloud() function shows only those words that appear 3 or more times. Use the min.freq argument to obtain a display with all Manufacturer values in the wordcloud.
+Use the table() function to create the variable model_table that tabulates the number of times each level of the Model variable appears in the Cars93 data frame.
+Use the wordcloud() function with the scale argument set to c(0.75, 0.25) and the min.freq argument set to display all Model values. Use the zoom feature in the 'Plots' window to see this wordcloud more clearly. Does it convey useful information?
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
+## Advanced plot customization and beyond
 
 This final chapter introduces a number of important topics, including the use of numerical plot details returned invisibly by functions like barplot() to enhance our plots, and saving plots to external files so they don't vanish when we end our current R session. This chapter also offers some guidelines for using color effectively in data visualizations, and it concludes with a brief introduction to the other three graphics systems in R.
