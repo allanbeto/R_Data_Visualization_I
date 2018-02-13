@@ -28,6 +28,8 @@ R supports four different graphics systems: base graphics, grid graphics, lattic
 #install.packages("aplpack")
 #install.packages("corrplot")
 #install.packages("rpart")
+#install.packages("wordcloud")
+#install.packages("RColorBrewer")
 ```
 
 ## A quick introduction to base R graphics
@@ -995,10 +997,66 @@ Use the table() function to create the variable model_table that tabulates the n
 Use the wordcloud() function with the scale argument set to c(0.75, 0.25) and the min.freq argument set to display all Model values. Use the zoom feature in the 'Plots' window to see this wordcloud more clearly. Does it convey useful information?
 
 ```{r}
+library("wordcloud")
+
+# Create mfr_table of manufacturer frequencies
+mfr_table <- table(Cars93$Manufacturer)
+
+# Create the default wordcloud from this table
+wordcloud(words = names(mfr_table), 
+          freq = as.numeric(mfr_table), 
+          scale = c(2,0.25))
+
+# Change the minimum word frequency
+wordcloud(words = names(mfr_table), 
+          freq = as.numeric(mfr_table), 
+          scale = c(2, 0.25), 
+          min.freq = 3)
+
+# Create model_table of model frequencies
+model_table <- table(Cars93$Model)
+
+# Create the wordcloud of all model names with smaller scaling
+wordcloud(words = names(model_table),
+          freq = as.numeric(model_table), 
+          scale = c(0.75, 0.25), 
+          min.freq = 1)
+
+
+
 
 ```
 
+### The Anscombe quartet
+
+This exercise and the next one are based on the Anscombe quartet, a collection of four datasets that appear to be essentially identical on the basis of simple summary statistics like means and standard deviations. For example, the mean x-values for these datasets are identical to three digits, while the mean y-values differ only in the third digit.
+
+In spite of these apparent similarities, the behavior of the four datasets is quite different and this becomes immediately apparent when we plot them.
+
+### INSTRUCTIONS
+
+Use the par() function to set up a two-by-two plot array.
+Using plot(), create 4 separate plots from the anscombe data frame:
+y1 vs. x1
+y2 vs. x2
+y3 vs. x3
+y4 vs. x4
+
 ```{r}
+# Set up a two-by-two plot array
+par(mfrow = c(2,2))
+
+# Plot y1 vs. x1 
+plot(anscombe$x1, anscombe$y1)
+
+# Plot y2 vs. x2
+plot(anscombe$x2, anscombe$y2)
+
+# Plot y3 vs. x3
+plot(anscombe$x3, anscombe$y3)
+
+# Plot y4 vs. x4
+plot(anscombe$x4, anscombe$y4)
 
 ```
 
