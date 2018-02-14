@@ -1163,12 +1163,212 @@ Use the layout() function to set up the desired plot array.
 Use the layout.show() function to show the arrangement of all three plots.
 
 ```{r}
+# Use the matrix function to create a matrix with three rows and two columns
+layoutMatrix <- matrix(
+  c(
+    0, 1,
+    2, 0,
+    0, 3
+  ), 
+  byrow = TRUE, 
+  nrow = 3
+)
+
+# Call the layout() function to set up the plot array
+layout(layoutMatrix)
+
+# Show where the three plots will go 
+layout.show(n=3)
+```
+
+### Creating a triangular array of plots
+The previous exercise asked you to create a plot array using the layout() function. Recall the layout matrix from the previous exercise:
+
+> layoutMatrix
+     [,1] [,2]
+[1,]    0    1
+[2,]    2    0
+[3,]    0    3
+
+This exercise asks you to use this array to give three different views of the whiteside data frame.
+
+The first plot, on the upper right of the plot array, shows the relationship of Gas and Temp using all data from whiteside. The second plot, in the center left of the plot array, shows the relationship of the two variables using data where Insul is equal to "Before". Finally, the third plot, on the lower left of the plot array, shows the relationship using data where Insul is equal to "After".
+
+The primary motivation for this exercise is that it is not possible to construct a plot array in this format using the mfrow parameter, since the array is not rectangular.
+
+INSTRUCTIONS
+100XP
+INSTRUCTIONS
+100XP
+The layout matrix you set up in the previous is available in your workspace as layoutMatrix. The whiteside data frame is already available in your workspace as well.
+
+Call the layout() function on layoutMatrix to set up the plot array.
+Construct a vector indexB that points to only those records with the Insul value "Before" and a vector indexA that points to only those records with the Insul value "After".
+Plot the Gas versus Temp values from the indexB data in the upper right plot in your array, using the y-axis limits c(0, 8). Give this plot the title "Before data only".
+Plot the Gas versus Temp values from the complete dataset in the center left plot, using the same y-axis limits as the first plot. Give this plot the title "Complete dataset".
+Plot the Gas versus Temp values from the indexA data in the lower right plot, again using the same y-axis limits. Give this plot the title "After data only".
+
+```{r}
+# Set up the plot array
+layout(layoutMatrix)
+
+# Construct vectors indexB and indexA
+indexB <- which(whiteside$Insul == "Before")
+indexA <- which(whiteside$Insul == "After")
+
+# Create plot 1 and add title
+plot(whiteside$Temp[indexB], whiteside$Gas[indexB],
+     ylim = c(0,8))
+title("Before data only")
+
+# Create plot 2 and add title
+plot(whiteside$Temp, whiteside$Gas,
+     ylim = c(0,8))
+title("Complete dataset")
+
+# Create plot 3 and add title
+plot(whiteside$Temp[indexA], whiteside$Gas[indexA],
+     ylim = c(0,8))
+title("After data only")
+
+```
+
+### Creating arrays with different sized plots
+Besides creating non-rectangular arrays, the layout() function can be used to create plot arrays with different sized component plots -- something else that is not possible by setting the par() function's mfrow parameter.
+
+This exercise illustrates the point, asking you to create a standard scatterplot of the zn versus rad variables from the Boston data frame as a smaller plot in the upper left, with a larger sunflower plot of the same data in the lower right.
+
+INSTRUCTIONS
+
+The Boston data frame in the MASS package is already available in your workspace.
+
+Using the c() function:
+Create the three-element vector row1 with values (1, 0, 0).
+Create the three-element vector row2 with values (0, 2, 2).
+Combine the first vector with two copies of the second vector into layoutVector, a vector of length 9.
+Using the matrix() function, convert layoutVector into the 3-by-3 matrix layoutMatrix whose first row is row1 and whose second and third rows are row2.
+Use the layout() function with layoutMatrix to configure a two-element plot array.
+In the first (smaller) plot, create a standard scatterplot of the zn variable versus the rad variable from the Boston data frame.
+In the second (larger) plot, create a sunflower plot using the sunflowerplot() function and the same variables.
+
+```{r}
+# Create row1, row2, and layoutVector
+row1 <- c(1,0,0)
+row2 <- c(0,2,2)
+layoutVector <- c(row1, row2, row2)
+
+# Convert layoutVector into layoutMatrix
+layoutMatrix <- matrix(layoutVector, byrow = TRUE, nrow = 3)
+
+# Set up the plot array
+layout(layoutMatrix)
+
+# Plot scatterplot
+plot(Boston$rad, Boston$zn)
+
+# Plot sunflower plot
+sunflowerplot(Boston$rad, Boston$zn)
+
+```
+
+## Advanced plot customization and beyond
+
+This final chapter introduces a number of important topics, including the use of numerical plot details returned invisibly by functions like barplot() to enhance our plots, and saving plots to external files so they don't vanish when we end our current R session. This chapter also offers some guidelines for using color effectively in data visualizations, and it concludes with a brief introduction to the other three graphics systems in R.
+
+### Some plot functions also return useful information
+
+As shown in the video, calling the barplot() function has the side effect of creating the plot we want, but it also returns a numerical vector with the center positions of each bar in the plot. This value is returned invisibly so we don't normally see it, but we can capture it with an assignment statement.
+
+These return values can be especially useful when we want to overlay text on the bars of a horizontal barplot. Then, we capture the return values and use them as the y parameter in a subsequent call to the text() function, allowing us to place the text at whatever x position we want but overlaid in the middle of each horizontal bar. This exercise asks you to construct a horizontal barplot that exploits these possibilities.
+
+Feel free to reference a similar example in the slides by clicking on the "Slides" tab next to the "R Console" tab.
+
+INSTRUCTIONS
+
+The Cars93 data frame from the MASS package is already available in your workspace.
+
+Use the table() function to generate the object tbl summarizing the number of records listing each value of the Cylinders variable from the Cars93 data frame.
+Use the barplot() function with the horiz argument set to TRUE to construct a horizontal barplot of this record summary, specifying the color of the bars to be "transparent" and returning the vector mids giving the vertical positions of the centers of each bar in the plot. Specify the names.arg argument as "" to suppress the y-axis legend on this plot.
+Use the text() function to label the Cylinders value for each bar in the barplot at the horizontal position 20. The names() function may prove useful here.
+Use the text() function to list the counts for each cylinders value at the horizontal position 35. Here, the as.numeric() function may prove useful.
+
+
+```{r}
+# Create a table of Cylinders frequencies
+tbl <- table(Cars93$Cylinders)
+
+# Generate a horizontal barplot of these frequencies
+mids <- barplot(tbl, horiz = TRUE,
+                col = "transparent",
+                names.arg = "")
+
+# Add names labels with text()
+text(20, mids, names(tbl))
+
+# Add count labels with text()
+text(35, mids, as.numeric(tbl))
+```
+
+### Using the symbols() function to display relations between more than two variables
+The scatterplot allows us to see how one numerical variable changes with the values of a second numerical variable. The symbols() function allows us to extend scatterplots to show the influence of other variables.
+
+This function is called with the variables x and y that define a scatterplot, along with another argument that specifies one of several possible shapes. Here, you are asked to use the circles argument to create a bubbleplot where each data point is represented by a circle whose radius depends on the third variable specified by the value of this argument.
+
+INSTRUCTIONS
+
+The Cars93 data frame from the MASS package is already available in your workspace.
+
+Use the symbols() function with its default settings and the appropriate arguments to create a bubble plot of MPG.city versus Horsepower from the Cars93 data frame, with the bubble area by the Price variable. Note that this means the bubble radius should be proportional to the square root of Price.
+Re-create the first plot, but with the optional argument inches set to 0.1.
+
+```{r}
+# Call symbols() to create the default bubbleplot
+symbols(Cars93$Horsepower, Cars93$MPG.city,
+        circles = sqrt(Cars93$Price))
+
+# Repeat, with the inches argument specified
+symbols(Cars93$Horsepower, Cars93$MPG.city,
+        circles = sqrt(Cars93$Price),
+        inches = 0.1)
+```
+
+### Saving plot results as files
+In an interactive R session, we typically generate a collection of different plots, often using the results to help us decide how to proceed with our analysis. This is particularly true in the early phases of an exploratory data analysis, but once we have generated a plot we want to share with others, it is important to save it in an external file.
+
+R provides support for saving graphical results in several different external file formats, including jpeg, png, tiff, or pdf files. In addition, we can incorporate graphical results into external documents, using tools like the Sweave() function or the knitr package. One particularly convenient way of doing this is to create an R Markdown document, an approach that forms the basis for another DataCamp course.
+
+Because png files can be easily shared and viewed as e-mail attachments and incorporated into many slide preparation packages (e.g. Microsoft Powerpoint), this exercise asks you to create a plot and save it as a png file. The basis for this process is the png() function, which specifies the name of the png file to be generated and sets up a special environment that captures all graphical output until we exit this environment with the dev.off() command.
+
+### INSTRUCTIONS
+
+Use the png() function to direct all subsequent plot results to the external file bubbleplot.png.
+Run the code to re-create the second bubble plot from the previous exercise.
+Exit the png() environment to return graphics control to your session by calling dev.off().
+Use the list.files() code provided to verify that bubbleplot.png was created. To do this, you need to specify "png" as the value to the pattern argument to list.files().
+
+```{r}
+# Call png() with the name of the file we want to create
+png("bubbleplot.png")
+
+# Re-create the plot from the last exercise
+symbols(Cars93$Horsepower, Cars93$MPG.city,
+        circles = sqrt(Cars93$Price),
+        inches = 0.1)
+
+# Save our file and return to our interactive session
+dev.off()
+
+# Verify that we have created the file
+list.files(pattern = "png")
+```
+
+
+
+
+```{r}
 
 ```
 
 
 
 
-## Advanced plot customization and beyond
-
-This final chapter introduces a number of important topics, including the use of numerical plot details returned invisibly by functions like barplot() to enhance our plots, and saving plots to external files so they don't vanish when we end our current R session. This chapter also offers some guidelines for using color effectively in data visualizations, and it concludes with a brief introduction to the other three graphics systems in R.
