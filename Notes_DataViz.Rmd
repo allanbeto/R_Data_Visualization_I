@@ -30,6 +30,9 @@ R supports four different graphics systems: base graphics, grid graphics, lattic
 #install.packages("rpart")
 #install.packages("wordcloud")
 #install.packages("RColorBrewer")
+#install.packages("gridExtra")
+#install.packages("tabplot")
+
 ```
 
 ## A quick introduction to base R graphics
@@ -1362,13 +1365,137 @@ dev.off()
 list.files(pattern = "png")
 ```
 
+### Iliinsky and Steele's 12 recommended colors
 
+This exercise asks you to create a horizontal barplot that shows Iliinsky and Steele's set of recommended 12 colors, in descending order of desirability from the top of the plot to the bottom. Also, the first six "more preferred" colors are displayed with longer bars to visually emphasize their preferred status over the other six.
 
+Code is provided to create the character vector IScolors with the names of the 12 colors recommended by Iliinsky and Steele, in their recommended order. We've also created the numeric vector barWidths containing the value 2 for the first six Iliinsky and Steele colors and the value 1 for the next six.
+
+In this exercise, you'll use the barplot() function to create the horizontal barplot shown in the preceeding figure, with the color names to the left of the bars and each bar drawn in the indicated color.
+
+INSTRUCTIONS
+
+Notice how the barWidths vector of length 12 contains the length of each bar shown.
+The 6 longer bars have a value of 2.
+The 6 shorter ones have a value of 1.
+Recreate the horizontal barplot you see on the right, using the horiz, col, axes, names.arg, and las arguments to barplot(). Note that since the horizontal barplot is constructed from the bottom up, it is necessary to reverse the IScolors and barWidths vectors in the barplot() function call, using the rev() function.
+
+```{r}
+# Iliinsky and Steele color name vector
+IScolors <- c("red", "green", "yellow", "blue",
+              "black", "white", "pink", "cyan",
+              "gray", "orange", "brown", "purple")
+
+# Create the data for the barplot
+barWidths <- c(rep(2, 6), rep(1, 6))
+
+# Recreate the horizontal barplot with colored bars
+barplot(rev(barWidths), horiz = TRUE, col = rev(IScolors), axes = FALSE,
+        names.arg = rev(IScolors), las = 1)
+
+```
+
+### Using color to enhance a bubbleplot
+
+In a previous exercise, you saw how the symbols() function could be used to generate a bubbleplot showing the relationship between three variables (specifically, Horsepower, MPG.city, and Price from the Cars93 data frame). There, the basic format was a scatterplot of MPG.city versus Horsepower, with points represented as bubbles, sized by Price.
+
+Here, you are asked to create a variation on this plot, using the factor variable Cylinders to determine both the size and the color of the bubbles. To do this, note that as.numeric(Cars93$Cylinders) generates a sequence of numerical values from 1 to 6 that specify the six unique levels of the Cylinders factor.
+
+The point of this exercise is to show that, in cases where color is an option, the clarity of this bubbleplot can be improved substantially through the use of color in addition to symbol size. Since the Cylinders variable exhibits six unique values, six colors are required to make this enhancement, so the top six colors recommended by Iliinsky and Steele are used here.
+
+### INSTRUCTIONS
+
+The Cars93 data frame in the MASS package is available in your workspace, and the vector IScolors of color names is created in the code included at the beginning of the exercise.
+
+Create the vector cylinderLevels giving numerical labels to the unique values of the Cylinders variable.
+Using the symbols() function, recreate the bubbleplot shown on the right of MPG.city vs. Horsepower with the bubbles sized by the cylinderLevels variable.
+Specify a maximum circle radius of 0.2 inches.
+Use the bg parameter to color each bubble according to the numerical level of the Cylinders factor variable (i.e., the cylinderLevels values), using the first six recommended colors from Iliinsky and Steele (e.g. the first Cylinder level should be colored "red", the second level colored "green", etc.)
+
+```{r}
+# Iliinsky and Steele color name vector
+IScolors <- c("red", "green", "yellow", "blue",
+              "black", "white", "pink", "cyan",
+              "gray", "orange", "brown", "purple")
+
+# Create the `cylinderLevel` variable
+cylinderLevels <- as.numeric(Cars93$Cylinders)
+
+# Create the colored bubbleplot
+symbols(Cars93$Horsepower, Cars93$MPG.city, 
+        circles = cylinderLevels, inches = .2,  
+        bg = IScolors[cylinderLevels])
+```
+
+### Using color to enhance stacked barplots
+
+The most common barplot consists of a collection of vertical bars, each representing some characteristic of one of a finite number of datasets or data subsets. Several previous exercises have illustrated the utility of the somewhat less common horizontal barplot, useful in part because it allows text to be displayed horizontally across the bars, as illustrated in Exercise 1.
+
+Another useful variant of the standard bar plot is the stacked bar plot, where each bar in the plot is partitioned into segments characterizing portions of the data characterized by the bar. Stacked bar plots can also be generated using the barplot() function. Here, each bar is specified by a matrix whose columns specify the heights of the segments in each bar.
+
+By default, the barplot() function generates stacked bar plots using different shades of gray for the different segments of each bar in the plot. The point of this exercise is to show that, if we can use it, color can be a more effective alternative.
+
+### INSTRUCTIONS
+
+The character vector IScolors from the previous exercises is still available in your workspace.
+
+Create the table tbl giving the record counts for each Cylinders value at each Origin value (this table should have 6 rows and 2 columns).
+Using the barplot() function, create a stacked barplot that summarizes this information using shades of gray.
+Recreate this first plot, but using the first six Iliinsky and Steele colors for the six Cylinders levels.
+
+```{r}
+# Create a table of Cylinders by Origin
+tbl <- table(Cars93$Cylinders, Cars93$Origin)
+
+# Create the default stacked barplot
+barplot(tbl)
+
+# Enhance this plot with color
+barplot(tbl, col = IScolors)
+```
+
+### The tabplot package and grid graphics
+
+The tabplot package allows you to tap into the power of grid graphics without explicit knowledge of how the system works under the hood. The main function in tabplot is tableplot(), developed to visualize data distributions and relationships between variables in large datasets.
+
+Specifically, the tableplot() function constructs a set of side-by-side horizontal barplots, one for each variable. This function works best when viewing up to about 10 variables at a time, for datasets with arbitrarily many records. In this exercise, you are asked to apply this function to a dataset with just under 68,000 records and 11 variables.
+
+The tableplot() function is called with a data frame and, if no optional arguments are specified, it selects the first data column as the reference variable. This variable can be of any type, but the display is easiest to explain when it's numeric, as in the example considered here.
+
+For further details, refer to the vignette Visualization of large datasets with tabplot that accompanies the help files for the tabplot package.
+
+INSTRUCTIONS
+
+Load the insuranceData package.
+Use the data() function to load the dataCar data frame.
+Load the tabplot package the normal way, but surround your call to library() with the suppressPackageStartupMessages() function to avoid a bunch of unncessary output from printing to the console.
+Apply the tableplot() function to the dataCar data frame.
+
+```{r}
+
+library("gridExtra")
+# Load the insuranceData package
+library("insuranceData")
+
+# Use the data() function to load the dataCar data frame
+data(dataCar)
+
+# Load the tabplot package
+suppressPackageStartupMessages(library("tabplot"))
+
+# Generate the default tableplot() display
+tableplot(dataCar)
+```
+
+### 
 
 ```{r}
 
 ```
 
+###
 
+```{r}
 
+```
 
