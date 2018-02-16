@@ -32,6 +32,8 @@ R supports four different graphics systems: base graphics, grid graphics, lattic
 #install.packages("RColorBrewer")
 #install.packages("gridExtra")
 #install.packages("tabplot")
+#install.packages("lattice")
+#install.packages("ggplot2")
 
 ```
 
@@ -1487,15 +1489,65 @@ suppressPackageStartupMessages(library("tabplot"))
 tableplot(dataCar)
 ```
 
-### 
+### A lattice graphics example
+
+Another package built on grid graphics is lattice, but unlike tabplot, lattice is a general-purpose graphics package that provides alternative implementations of many of the plotting functions available in base graphics. Specific examples include scatterplots with the xyplot() function, bar charts with the barchart() function, and boxplots with the bwplot() function.
+
+One important difference between lattice graphics and base graphics is that similar functions available in both graphics systems often produce very different results when applied to the same data. As a specific example, the bwplot() function creates horizontal boxplots, while the default result of the boxplot() is a vertical boxplot display.
+
+Another more important difference between lattice and base graphics is that lattice graphics supports conditional plots that show the separate relationships between variables within different groups. This capability is illustrated in this exercise, where you are asked to construct a plot showing the relationship between the variables calories and sugars from the UScereal data frame, conditional on the value of the shelf variable.
+
+### INSTRUCTIONS
+
+Load the lattice package to make the function xyplot() available.
+Using the conditional formula format "y ~ x | z" (scatterplot of y vs. x, conditioned on z), construct a conditional scatterplot of calories vs. sugars conditional on shelf from the UScereal data frame in the MASS package. Make sure to convert shelf to a factor. 
 
 ```{r}
+# Load the lattice package
+library("lattice")
 
+# Use xyplot() to construct the conditional scatterplot
+xyplot(calories ~ sugars | as.factor(shelf), data = UScereal)
 ```
 
-###
+### A ggplot2 graphics example
+
+This final exercise provides an introduction to the ggplot2 graphics package. Like the lattice package, the ggplot2 package is also based on grid graphics and it also represents a general purpose graphics package.
+
+The unique feature of the ggplot2 package is that it is based on the grammar of graphics, a systematic approach to building and modifying graphical displays, starting with a basic graphics element and refining it through the addition of successive modifiers.
+
+This exercise provides a simple illustration of the approach. Specifically, you are asked to use ggplot2 to, first, create a simple scatterplot of MPG.city versus Horsepower from the Cars93 data frame. Next, you are asked to add a simple modifier that adds color based on the value of the Cylinders variable. Finally, you are asked to convert this result into a colored bubble plot, with both bubble sizes and colors determined by the Cylinders variable.
+
+The primary purpose of this exercise is to give you a flavor of the ggplot2 package. DataCamp offers several courses dedicated to using this popular graphics package to generate high-quality data visualizations.
+
+INSTRUCTIONS
+
+The character vector IScolors from the previous exercises is still available in your workspace.
+
+Load the ggplot2 package.
+Create basePlot as the ggplot object based on the Cars93 data frame from the MASS package and the scatterplot aesthetic with x as the Horsepower variable and y as the MPG.city variable. When passing the variable names to x and y, they should be unquoted (e.g. x = var_name). (Note that this definition does not render the scatterplot.)
+Make a simple rendering of basePlot with the geom_point() function.
+Make a second rendering using the colour parameter of geom_point() to specify the first six Iliinsky-Steele colors for the six Cylinders levels.
+Make a third rendering with the same coloring as the second one, but with the point sizes corresponding to the levels of the Cylinders factor variable.
 
 ```{r}
+# Load the ggplot2 package
+library(ggplot2)
 
+# Create the basic plot (not displayed): basePlot
+basePlot <- ggplot(Cars93, aes(x = Horsepower, y = MPG.city))
+
+# Display the basic scatterplot
+basePlot + 
+  geom_point()
+
+# Color the points by Cylinders value
+basePlot + 
+  geom_point(colour = IScolors[Cars93$Cylinders])
+
+# Make the point sizes also vary with Cylinders value
+basePlot + 
+  geom_point(colour = IScolors[Cars93$Cylinders], 
+             size = as.numeric(Cars93$Cylinders))
 ```
 
